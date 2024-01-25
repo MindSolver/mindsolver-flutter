@@ -1,1 +1,1 @@
-# mindsolver-flutter
+# mindsolver_flutter
