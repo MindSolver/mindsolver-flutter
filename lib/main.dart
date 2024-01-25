@@ -7,19 +7,23 @@ import 'package:mindsolver_flutter/screens/mypage/my_page_screen.dart';
 import 'package:mindsolver_flutter/utils/constants.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -32,10 +36,10 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: SafeArea(
         child: [
-          HomeScreen(),
-          DiaryScreen(),
-          ChallengeScreen(),
-          MyPageScreen(),
+          const HomeScreen(),
+          const DiaryScreen(),
+          const ChallengeScreen(),
+          const MyPageScreen(),
         ][currentPageIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
