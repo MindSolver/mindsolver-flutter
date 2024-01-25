@@ -1,12 +1,19 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mindsolver_flutter/firebase_options.dart';
 import 'package:mindsolver_flutter/screens/challenge/challenge.screen.dart';
 import 'package:mindsolver_flutter/screens/diary/diary_screen.dart';
 import 'package:mindsolver_flutter/screens/home/home_screen.dart';
 import 'package:mindsolver_flutter/screens/mypage/my_page_screen.dart';
 import 'package:mindsolver_flutter/utils/constants.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(MyApp());
 }
 
