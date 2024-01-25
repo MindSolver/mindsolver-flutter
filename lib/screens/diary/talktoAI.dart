@@ -9,8 +9,7 @@ class TalkToAI extends StatefulWidget {
 }
 
 class _TalkToAIState extends State<TalkToAI> {
-  FocusNode focusNode = FocusNode();
-  TextEditingController textEditingController = TextEditingController();
+  TextEditingController categoryController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -19,36 +18,103 @@ class _TalkToAIState extends State<TalkToAI> {
         title: const Text('Talk to AI'),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Center(
-            child: Text('COOL'),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              onTap: () {
-                // Show the keyboard by focusing on the text input field
-                FocusScope.of(context).requestFocus(FocusNode());
-                Future.delayed(
-                  const Duration(milliseconds: 100),
-                  () => FocusScope.of(context).requestFocus(focusNode),
-                );
-              },
-              controller: textEditingController,
-              decoration: InputDecoration(
-                labelText: 'Talk to AI',
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: customColor.kpurpleDarkerColor,
+          // Some buttons at the top
+          // "작성하기" button at the bottom
+          Expanded(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Show a popup with buttons and a text input field
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('How do you feel now?'),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                          ),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 16.0),
+                              Row(
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      // Add your onPressed logic for Option 1
+                                      String enteredCategory =
+                                          categoryController.text;
+                                      // Process the entered category as needed
+                                      print(
+                                          'Entered Category: $enteredCategory');
+                                      Navigator.of(context).pop();
+                                    },
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                        customColor.kpurpleColor,
+                                      ),
+                                      foregroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                        Colors.white,
+                                      ),
+                                    ),
+                                    child: const Text('Icon 1'),
+                                  ),
+                                  const SizedBox(width: 16.0), // Add spacing
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      // Add your onPressed logic for Option 2
+                                      Navigator.of(context).pop();
+                                    },
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                        customColor.kpurpleColor,
+                                      ),
+                                      foregroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                        Colors.white,
+                                      ),
+                                    ),
+                                    child: const Text('Icon 2'),
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: TextField(
+                                  controller: categoryController,
+                                  decoration: InputDecoration(
+                                    labelText: 'Write down how you feel',
+                                    border: const OutlineInputBorder(),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: customColor.kpurpleDarkerColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                      customColor.kpurpleDarkerColor,
+                    ),
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.white),
                   ),
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: customColor.kpurpleDarkerColor,
-                  ),
-                  borderRadius: BorderRadius.circular(20.0),
+                  child: const Text('작성하기'),
                 ),
               ),
             ),
