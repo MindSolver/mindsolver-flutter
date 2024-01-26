@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "66515639179",
+    "project_id": "mindsolver",
+    "storage_bucket": "mindsolver.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:66515639179:android:1cc60a81a6fa057f5ded8e",
+        "android_client_info": {
+          "package_name": "com.example.mindsolver_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "66515639179-j1g08dm7k43p6eb2eqipl4hj6bq24p3e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwdgjjGNhiNsQiwv7x2jgBux0-dBjUTws"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "66515639179-j1g08dm7k43p6eb2eqipl4hj6bq24p3e.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "66515639179-g2vvkoac6lf5npaj8t9c05tfco9a3ot1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.mindsolverFlutter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

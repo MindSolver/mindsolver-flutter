@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:mindsolver_flutter/models/conversation.dart';
+import 'package:mindsolver_flutter/screens/diary/diary_view_model.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import 'talktoAI.dart'; // Import the file containing talktoAI class
 import 'package:mindsolver_flutter/utils/constants.dart' as customColor;
 
 class DiaryScreen extends StatefulWidget {
-  const DiaryScreen({Key? key}) : super(key: key);
+  const DiaryScreen({super.key});
 
   @override
   _DiaryScreenState createState() => _DiaryScreenState();
@@ -14,6 +16,22 @@ class DiaryScreen extends StatefulWidget {
 class _DiaryScreenState extends State<DiaryScreen> {
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now(); // Added focusedDay
+  DiaryViewModel diaryViewModel = DiaryViewModel();
+  List<Conversation>? model;
+
+  @override
+  void initState() {
+    super.initState();
+    initializeConversations(_selectedDay);
+  }
+
+  Future<void> initializeConversations(DateTime selectedDay) async {
+    model = await diaryViewModel.loadConversations(selectedDay);
+    // Trigger a rebuild after loading conversations
+    if (mounted) {
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +109,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
               setState(() {
                 _selectedDay = selectedDay;
                 _focusedDay = selectedDay;
+                initializeConversations(_selectedDay);
               });
             },
           ),
@@ -116,13 +135,15 @@ class _DiaryScreenState extends State<DiaryScreen> {
             width: 500,
             height: 100,
             decoration: BoxDecoration(
-              color: customColor.kpurpleColor, // Change to your custom color
+              color: customColor.kpurpleColor,
               borderRadius: BorderRadius.circular(20),
             ),
-            child: const Center(
+            child: Center(
               child: Text(
-                'Whatever text you saved',
-                style: TextStyle(color: Colors.white),
+                (model != null && model!.isNotEmpty)
+                    ? model![0].message
+                    : _selectedDay.toLocal().toString(),
+                style: const TextStyle(color: Colors.white),
               ),
             ),
           ),
