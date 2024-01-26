@@ -12,18 +12,21 @@ class DiaryViewModel {
     final userId = _auth.currentUser?.uid;
 
     try {
-      DateTime startDate = DateTime(date.year, date.month, date.day, 0, 0, 0); // 해당 날짜의 시작
-      DateTime endDate = DateTime(date.year, date.month, date.day, 23, 59, 59); // 해당 날짜의 끝
+      DateTime startDate =
+          DateTime(date.year, date.month, date.day, 0, 0, 0); // 해당 날짜의 시작
+      DateTime endDate =
+          DateTime(date.year, date.month, date.day, 23, 59, 59); // 해당 날짜의 끝
 
       QuerySnapshot querySnapshot = await _firestore //
           .collection('users')
           .doc(userId)
           .collection('conversations')
-          .where('timeStamp', isGreaterThanOrEqualTo: Timestamp.fromDate(startDate))
+          .where('timeStamp',
+              isGreaterThanOrEqualTo: Timestamp.fromDate(startDate))
           .where('timeStamp', isLessThanOrEqualTo: Timestamp.fromDate(endDate))
           .get();
 
-      querySnapshot.docs.forEach((doc) {
+      for (var doc in querySnapshot.docs) {
         conversations.add(Conversation(
           id: doc['id'],
           imoji: doc['imoji'],
@@ -32,7 +35,7 @@ class DiaryViewModel {
           diaryHour: doc['diaryHour'],
           timeStamp: (doc['timeStamp'] as Timestamp).toDate(),
         ));
-      });
+      }
     } catch (e) {
       print('Error loading conversations: $e');
     }

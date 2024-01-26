@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mindsolver_flutter/models/conversation.dart';
 import 'package:mindsolver_flutter/screens/diary/diary_view_model.dart';
 import 'package:mindsolver_flutter/utils/constants.dart' as customColor;
+import 'package:intl/intl.dart';
 
 class TalkToAI extends StatefulWidget {
   const TalkToAI({super.key});
@@ -20,7 +21,7 @@ class _TalkToAIState extends State<TalkToAI> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('다이어리'),
+        title: const Text('AI'),
       ),
       body: Column(
         children: [
@@ -36,17 +37,31 @@ class _TalkToAIState extends State<TalkToAI> {
                     alignment: conversation.isBot
                         ? Alignment.centerLeft
                         : Alignment.centerRight,
-                    child: Container(
-                      padding: const EdgeInsets.all(16.0),
-                      decoration: BoxDecoration(
-                        color:
-                            conversation.isBot ? Colors.blueGrey : Colors.green,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        conversation.message,
-                        style: const TextStyle(color: Colors.white),
-                      ),
+                    child: Row(
+                      children: [
+                        if (!conversation.isBot) // Check if it's not a bot
+                          const Expanded(
+                            child:
+                                SizedBox(), // Spacer to push the time and text to the right
+                          ),
+                        Text(
+                          DateFormat('HH:mm').format(conversation.timeStamp),
+                        ),
+                        const SizedBox(width: 8.0),
+                        Container(
+                          padding: const EdgeInsets.all(14.0),
+                          decoration: BoxDecoration(
+                            color: conversation.isBot
+                                ? customColor.kpurpleColor
+                                : customColor.kpurpleLightColor,
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Text(
+                            conversation.message,
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 );
@@ -71,7 +86,24 @@ class _TalkToAIState extends State<TalkToAI> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(height: 16.0),
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: TextField(
+                              controller: textEditingController,
+                              decoration: InputDecoration(
+                                labelText: 'Write down how you feel',
+                                border: const OutlineInputBorder(),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: customColor.kpurpleDarkerColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16.0), // Add space here
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               ElevatedButton(
                                 onPressed: () {
@@ -122,21 +154,6 @@ class _TalkToAIState extends State<TalkToAI> {
                               ),
                             ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: TextField(
-                              controller: textEditingController,
-                              decoration: InputDecoration(
-                                labelText: 'Write down how you feel',
-                                border: const OutlineInputBorder(),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: customColor.kpurpleDarkerColor,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
                         ],
                       ),
                     );
@@ -149,7 +166,7 @@ class _TalkToAIState extends State<TalkToAI> {
                 ),
                 foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
               ),
-              child: const Text('작성하기'),
+              child: const Text('Send'),
             ),
           ),
         ],
