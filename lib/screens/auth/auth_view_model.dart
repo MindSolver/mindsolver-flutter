@@ -6,7 +6,8 @@ import 'package:mindsolver_flutter/models/user.dart';
 class AuthViewModel {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-  final CollectionReference _usersCollection = FirebaseFirestore.instance.collection('users');
+  final CollectionReference _usersCollection =
+      FirebaseFirestore.instance.collection('users');
 
   Future<UserDoc?> getCurrentUser() async {
     User? user = _auth.currentUser;
@@ -29,8 +30,10 @@ class AuthViewModel {
 
   Future signInWithGoogle() async {
     try {
+      print("before");
       final googleSignInAccount = await _googleSignIn.signIn();
       if (googleSignInAccount == null) {
+        print("googleSignInAccount");
         return;
       }
 
@@ -45,10 +48,12 @@ class AuthViewModel {
       final user = authResult.user;
 
       if (user == null) {
+        print("user");
         return;
       }
 
-      final bool userExists = await _usersCollection.doc(user.uid).get().then((doc) {
+      final bool userExists =
+          await _usersCollection.doc(user.uid).get().then((doc) {
         return doc.exists;
       });
 
