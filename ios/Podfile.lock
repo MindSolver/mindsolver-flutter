@@ -705,6 +705,9 @@ PODS:
     - FirebaseCoreExtension (~> 10.0)
     - GTMSessionFetcher/Core (< 4.0, >= 2.1)
   - Flutter (1.0.0)
+  - fluttertoast (0.0.2):
+    - Flutter
+    - Toast
   - GoogleUtilities/AppDelegateSwizzler (7.12.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -790,6 +793,7 @@ PODS:
   - nanopb/encode (2.30909.1)
   - PromisesObjC (2.3.1)
   - RecaptchaInterop (100.0.0)
+  - Toast (4.1.0)
 
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
@@ -797,6 +801,7 @@ DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
+  - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
 
 SPEC REPOS:
   trunk:
@@ -821,6 +826,7 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - RecaptchaInterop
+    - Toast
 
 EXTERNAL SOURCES:
   cloud_firestore:
@@ -833,6 +839,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_storage/ios"
   Flutter:
     :path: Flutter
+  fluttertoast:
+    :path: ".symlinks/plugins/fluttertoast/ios"
 
 SPEC CHECKSUMS:
   abseil: 926fb7a82dc6d2b8e1f2ed7f3a718bce691d1e46
@@ -853,6 +861,7 @@ SPEC CHECKSUMS:
   FirebaseSharedSwift: 2fbf73618288b7a36b2014b957745dcdd781389e
   FirebaseStorage: 8333c4b183764cdd170d9539a61322b71c23adff
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  fluttertoast: 31b00dabfa7fb7bacd9e7dbee580d7a2ff4bf265
   GoogleUtilities: 0759d1a57ebb953965c2dfe0ba4c82e95ccc2e34
   "gRPC-C++": 2df8cba576898bdacd29f0266d5236fa0e26ba6a
   gRPC-Core: a21a60aefc08c68c247b439a9ef97174b0c54f96
@@ -861,6 +870,7 @@ SPEC CHECKSUMS:
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
+  Toast: ec33c32b8688982cecc6348adeae667c1b9938da
 
 PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
 
