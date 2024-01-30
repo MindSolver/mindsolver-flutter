@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mindsolver_flutter/models/conversation.dart';
 import 'package:mindsolver_flutter/models/user.dart';
+import 'package:mindsolver_flutter/models/Answer.dart';
 
 class DiaryViewModel {
   final _auth = FirebaseAuth.instance;
@@ -62,6 +63,26 @@ class DiaryViewModel {
       });
     } catch (e) {
       print('Error adding conversation: $e');
+    }
+  }
+
+  Future<void> addAnswer(Answer answer) async {
+    try {
+      final userId = _auth.currentUser?.uid;
+      final docRef = _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('answers')
+          .doc();
+
+      docRef.set({
+        'id': docRef.id,
+        'questionNum': answer.questionNum,
+        'message': answer.message,
+        'timeStamp': answer.timeStamp,
+      });
+    } catch (e) {
+      print('Error adding answer: $e');
     }
   }
 }

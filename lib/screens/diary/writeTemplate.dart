@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mindsolver_flutter/models/conversation.dart';
+import 'package:mindsolver_flutter/screens/diary/diary_screen.dart';
 import 'package:mindsolver_flutter/screens/diary/diary_view_model.dart';
+import 'package:mindsolver_flutter/models/Answer.dart';
 import 'package:mindsolver_flutter/utils/constants.dart' as customColor;
 
 class WriteTemplate extends StatefulWidget {
@@ -12,6 +14,10 @@ class WriteTemplate extends StatefulWidget {
 
 class _WriteTemplate extends State<WriteTemplate> {
   double boxwidth = 350;
+  DiaryViewModel diaryViewModel = DiaryViewModel();
+  TextEditingController textEditingController1 = TextEditingController();
+  TextEditingController textEditingController2 = TextEditingController();
+  TextEditingController textEditingController3 = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +44,8 @@ class _WriteTemplate extends State<WriteTemplate> {
             Center(
               child: SizedBox(
                 width: boxwidth,
-                child: const TextField(
+                child: TextField(
+                  controller: textEditingController1,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Your answer',
@@ -65,7 +72,8 @@ class _WriteTemplate extends State<WriteTemplate> {
             Center(
               child: SizedBox(
                 width: boxwidth,
-                child: const TextField(
+                child: TextField(
+                  controller: textEditingController2,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Your answer',
@@ -90,7 +98,8 @@ class _WriteTemplate extends State<WriteTemplate> {
             Center(
               child: SizedBox(
                 width: boxwidth,
-                child: const TextField(
+                child: TextField(
+                  controller: textEditingController3,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Your answer',
@@ -106,7 +115,41 @@ class _WriteTemplate extends State<WriteTemplate> {
                 onPressed: () {
                   // Handle submission logic here
                   // You can print the values, store them, or perform any other action
-                  print('Submission logic goes here');
+                  Answer answer1 = Answer(
+                    questionNum: 1,
+                    message: textEditingController1.text,
+                    timeStamp: DateTime.now(),
+                  );
+
+                  Answer answer2 = Answer(
+                    questionNum: 2,
+                    message: textEditingController2.text,
+                    timeStamp: DateTime.now(),
+                  );
+
+                  Answer answer3 = Answer(
+                    questionNum: 3,
+                    message: textEditingController3.text,
+                    timeStamp: DateTime.now(),
+                  );
+
+                  setState(() {
+                    diaryViewModel.addAnswer(answer1);
+                    diaryViewModel.addAnswer(answer2);
+                    diaryViewModel.addAnswer(answer3);
+                  });
+
+                  textEditingController1.clear();
+                  textEditingController2.clear();
+                  textEditingController3.clear();
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const DiaryScreen(), // Replace OtherPage() with the desired widget for the other page
+                    ),
+                  );
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
