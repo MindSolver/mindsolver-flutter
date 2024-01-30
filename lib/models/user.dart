@@ -3,6 +3,7 @@ class UserDoc {
   final String name;
   final String job;
   final String profileUrl;
+  final int gener; // 0: 남자, 1: 여자
 
   final int age;
 
@@ -12,5 +13,11 @@ class UserDoc {
     required this.job,
     required this.profileUrl,
     required this.age,
+    required this.gener,
   });
+
+  @override
+  String toString() {
+    return 'UserDoc{uid: $uid, name: $name, job: $job, profileUrl: $profileUrl, age: $age, gener: $gener}';
+  }
 }

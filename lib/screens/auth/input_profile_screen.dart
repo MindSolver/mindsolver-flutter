@@ -22,11 +22,11 @@ class _InputProfileScreenState extends State<InputProfileScreen> {
   late TextEditingController _userNameController;
   final _ageController = TextEditingController();
   final _jobController = TextEditingController();
+  int _gender = 0; // 초기값은 남자로 설정
 
   @override
   void initState() {
     super.initState();
-
     _userNameController = TextEditingController(text: widget.userName);
   }
 
@@ -36,61 +36,90 @@ class _InputProfileScreenState extends State<InputProfileScreen> {
       create: (context) => viewModel,
       child: Scaffold(
         body: SafeArea(
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 24),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Input your profile', style: kTitleTextStyle),
-                SizedBox(height: 32),
-                InputProfileImageBox(),
-                SizedBox(height: 32),
-                TextField(
-                  controller: _userNameController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Username',
+          child: SingleChildScrollView(
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Input your profile', style: kTitleTextStyle),
+                  SizedBox(height: 32),
+                  InputProfileImageBox(),
+                  SizedBox(height: 32),
+                  TextField(
+                    controller: _userNameController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Username',
+                    ),
                   ),
-                ),
-                SizedBox(height: 16),
-                TextField(
-                  controller: _ageController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Age',
+                  SizedBox(height: 16),
+                  TextField(
+                    controller: _ageController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Age',
+                    ),
                   ),
-                ),
-                SizedBox(height: 16),
-                TextField(
-                  controller: _jobController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Job',
+                  SizedBox(height: 16),
+                  TextField(
+                    controller: _jobController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Job',
+                    ),
                   ),
-                ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () async {
-                    final name = _userNameController.text;
-                    final job = _jobController.text;
-                    await viewModel.addUser(UserDoc(
-                      name: name,
-                      job: job,
-                      profileUrl: viewModel.profileUrl,
-                      age: int.parse(_ageController.text),
-                    ));
-                    if (!mounted) return;
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyHomePage()));
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                    elevation: 2,
-                    shadowColor: Colors.black,
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Text('Gender: '),
+                      Radio(
+                        value: 0,
+                        groupValue: _gender,
+                        onChanged: (value) {
+                          setState(() {
+                            _gender = value as int;
+                          });
+                        },
+                      ),
+                      Text('Male'),
+                      Radio(
+                        value: 1,
+                        groupValue: _gender,
+                        onChanged: (value) {
+                          setState(() {
+                            _gender = value as int;
+                          });
+                        },
+                      ),
+                      Text('Female'),
+                    ],
                   ),
-                  child: Text('Confirm'),
-                ),
-              ],
+                  SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () async {
+                      final name = _userNameController.text;
+                      final job = _jobController.text;
+                      await viewModel.addUser(UserDoc(
+                        name: name,
+                        job: job,
+                        profileUrl: viewModel.profileUrl,
+                        age: int.tryParse(_ageController.text) ?? 0,
+                        gener: _gender,
+                      ));
+                      if (!mounted) return;
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyHomePage()));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      elevation: 2,
+                      shadowColor: Colors.black,
+                    ),
+                    child: Text('Confirm'),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
