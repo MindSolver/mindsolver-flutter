@@ -18,6 +18,19 @@ class _TalkToAIState extends State<TalkToAI> {
   final int _diaryHour = 9;
 
   @override
+  void initState() {
+    super.initState();
+    // Load conversations for the current date
+    loadConversationsForCurrentDate();
+  }
+
+  Future<void> loadConversationsForCurrentDate() async {
+    DateTime currentDate = DateTime.now();
+    model = await diaryViewModel.loadConversations(currentDate);
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -126,15 +139,26 @@ class _TalkToAIState extends State<TalkToAI> {
                                 onPressed: () {
                                   String enteredText =
                                       textEditingController.text;
-                                  Conversation newConversation = Conversation(
+                                  Conversation userConversation = Conversation(
                                     message: enteredText,
                                     isBot: false,
                                     diaryHour: _diaryHour,
                                     timeStamp: DateTime.now(),
                                   );
 
+                                  Conversation botConversatioin = Conversation(
+                                      message: "That's nice!",
+                                      isBot: true,
+                                      diaryHour: _diaryHour,
+                                      timeStamp: DateTime.now());
+
                                   setState(() {
-                                    model.add(newConversation);
+                                    model.add(userConversation);
+                                    model.add(botConversatioin);
+                                    diaryViewModel
+                                        .addConversation(userConversation);
+                                    diaryViewModel
+                                        .addConversation(botConversatioin);
                                   });
 
                                   textEditingController.clear();
