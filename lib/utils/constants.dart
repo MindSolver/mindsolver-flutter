@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 
-Color kpurpleDarkerColor = const Color(0xFF7500BC);
-Color kpurpleColor = const Color(0xFFD1A5EC);
-Color kpurpleLightColor = const Color(0xFFF1D8FF);
+Color kPurpleDarkerColor = const Color(0xFF7500BC);
+Color kPurpleColor = const Color(0xFFD1A5EC);
+Color kPurpleLightColor = const Color(0xFFF1D8FF);
 
-Color kgrayLightColor = const Color(0xFFD9D9D9);
-Color kgrayColor = const Color(0xFFBCBCBC);
-Color kgrayDarkColor = const Color(0xFF777777);
+Color kGrayLightColor = const Color(0xFFD9D9D9);
+Color kGrayColor = const Color(0xFFBCBCBC);
+Color kGrayDarkColor = const Color(0xFF777777);
 
-Color kyellowColor = const Color(0xFFFFDF35);
-Color kyellowLightColor = const Color(0xFFFFEE94);
+Color kYellowColor = const Color(0xFFFFDF35);
+Color kYellowLightColor = const Color(0xFFFFEE94);
 
-Color kgreenColor = const Color(0xFF9FF01C);
-Color kgreenLightColor = const Color(0xFFCBFE77);
+Color kGreenColor = const Color(0xFF9FF01C);
+Color kGreenLightColor = const Color(0xFFCBFE77);
 
-Color kskyColor = const Color(0xFF76C5FF);
-Color kskyLightColor = const Color(0xFFAEDDFF);
+Color kSkyColor = const Color(0xFF76C5FF);
+Color kSkyLightColor = const Color(0xFFAEDDFF);
 
 TextStyle kTitleTextStyle = const TextStyle(
   fontSize: 24,
@@ -37,6 +37,18 @@ TextStyle kBody1TextStyle = const TextStyle(
 
 TextStyle kBody2TextStyle = const TextStyle(
   fontSize: 14,
+  fontFamily: 'Pretendard',
+  fontWeight: FontWeight.w600,
+);
+
+TextStyle kCaption1TextStyle = const TextStyle(
+  fontSize: 10,
+  fontFamily: 'Pretendard',
+  fontWeight: FontWeight.w400,
+);
+
+TextStyle kCaption2TextStyle = const TextStyle(
+  fontSize: 10,
   fontFamily: 'Pretendard',
   fontWeight: FontWeight.w600,
 );
