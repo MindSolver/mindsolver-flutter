@@ -29,8 +29,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ][currentPageIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
-          unselectedItemColor: kpurpleColor,
-          selectedItemColor: kpurpleDarkerColor,
+          unselectedItemColor: kPurpleColor,
+          selectedItemColor: kPurpleDarkerColor,
           showUnselectedLabels: true,
           currentIndex: currentPageIndex,
           onTap: (int index) {
@@ -41,23 +41,23 @@ class _MyHomePageState extends State<MyHomePage> {
           },
           items: [
             BottomNavigationBarItem(
-              icon: SvgPicture.asset('icons/home.svg', color: kpurpleColor),
-              activeIcon: SvgPicture.asset('icons/home.svg', color: kpurpleDarkerColor),
+              icon: SvgPicture.asset('icons/home.svg', color: kPurpleColor),
+              activeIcon: SvgPicture.asset('icons/home.svg', color: kPurpleDarkerColor),
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset('icons/book.svg', color: kpurpleColor),
-              activeIcon: SvgPicture.asset('icons/book.svg', color: kpurpleDarkerColor),
+              icon: SvgPicture.asset('icons/book.svg', color: kPurpleColor),
+              activeIcon: SvgPicture.asset('icons/book.svg', color: kPurpleDarkerColor),
               label: 'Diary',
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset('icons/challenge.svg', color: kpurpleColor),
-              activeIcon: SvgPicture.asset('icons/challenge.svg', color: kpurpleDarkerColor),
+              icon: SvgPicture.asset('icons/challenge.svg', color: kPurpleColor),
+              activeIcon: SvgPicture.asset('icons/challenge.svg', color: kPurpleDarkerColor),
               label: 'Challenge',
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset('icons/profile.svg', color: kpurpleColor),
-              activeIcon: SvgPicture.asset('icons/profile.svg', color: kpurpleDarkerColor),
+              icon: SvgPicture.asset('icons/profile.svg', color: kPurpleColor),
+              activeIcon: SvgPicture.asset('icons/profile.svg', color: kPurpleDarkerColor),
               label: 'Mypage',
             ),
           ]),

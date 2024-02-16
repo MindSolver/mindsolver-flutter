@@ -18,7 +18,7 @@ class ChatBubble extends StatelessWidget {
         margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: isMe ? kpurpleDarkerColor : kpurpleLightColor,
+          color: isMe ? kPurpleDarkerColor : kPurpleLightColor,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(isMe ? 16 : 0),
             topRight: Radius.circular(16),

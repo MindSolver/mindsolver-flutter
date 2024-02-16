@@ -26,7 +26,7 @@ class _WriteTemplate extends State<WriteTemplate> {
               width: boxwidth,
               padding: const EdgeInsets.all(14.0),
               decoration: BoxDecoration(
-                color: customColor.kpurpleLightColor,
+                color: customColor.kPurpleLightColor,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: const Text(
@@ -53,7 +53,7 @@ class _WriteTemplate extends State<WriteTemplate> {
               width: boxwidth,
               padding: const EdgeInsets.all(14.0),
               decoration: BoxDecoration(
-                color: customColor.kpurpleLightColor,
+                color: customColor.kPurpleLightColor,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: const Text(
@@ -78,7 +78,7 @@ class _WriteTemplate extends State<WriteTemplate> {
               width: boxwidth,
               padding: const EdgeInsets.all(14.0),
               decoration: BoxDecoration(
-                color: customColor.kpurpleLightColor,
+                color: customColor.kPurpleLightColor,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: const Text(
@@ -109,10 +109,8 @@ class _WriteTemplate extends State<WriteTemplate> {
                   print('Submission logic goes here');
                 },
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      customColor.kpurpleDarkerColor),
-                  foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.white),
+                  backgroundColor: MaterialStateProperty.all<Color>(customColor.kPurpleDarkerColor),
+                  foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                 ),
                 child: const Text('Submit'),
               ),

@@ -50,7 +50,7 @@ class AuthScreen extends StatelessWidget {
                       children: [
                         SvgPicture.asset('icons/google.svg'),
                         SizedBox(width: 16),
-                        Text('Sign in with Google', style: kSubtitleTextStyle.copyWith(color: kgrayDarkColor)),
+                        Text('Sign in with Google', style: kSubtitleTextStyle.copyWith(color: kGrayDarkColor)),
                       ],
                     ),
                   ),

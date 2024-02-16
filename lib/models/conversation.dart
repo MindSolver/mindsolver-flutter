@@ -3,7 +3,7 @@ class Conversation {
   final String? imoji; // 이모지
   final String message; // 메시지
   final bool isBot; // 봇
-  final int diaryHour; // 일기 작성 시간 e.g. 9, 11
+  final int diaryHour; // 일기 작성 시간 e.g. 9, 13 19 23
   final DateTime timeStamp; // 메세지 전송 시간
 
   Conversation({

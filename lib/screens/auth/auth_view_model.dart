@@ -7,8 +7,7 @@ import 'package:mindsolver_flutter/models/user.dart';
 class AuthViewModel {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-  final CollectionReference _usersCollection =
-      FirebaseFirestore.instance.collection('users');
+  final CollectionReference _usersCollection = FirebaseFirestore.instance.collection('users');
 
   Future<bool> signInWithGoogle() async {
     try {

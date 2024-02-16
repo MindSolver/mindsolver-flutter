@@ -29,7 +29,7 @@ class MyPageScreen extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: kpurpleColor,
+                color: kPurpleColor,
                 borderRadius: BorderRadius.all(Radius.circular(16)),
               ),
               child: Column(
@@ -102,8 +102,8 @@ class MyPageScreen extends StatelessWidget {
               children: [
                 DiaryStaticCard(
                   name: '오늘',
-                  backgroundColor: kpurpleLightColor,
-                  highlightColor: kpurpleDarkerColor,
+                  backgroundColor: kPurpleLightColor,
+                  highlightColor: kPurpleDarkerColor,
                   child: SvgPicture.asset(
                     'icons/checkbox_empty.svg',
                     color: Colors.white,
@@ -114,8 +114,8 @@ class MyPageScreen extends StatelessWidget {
                 SizedBox(width: 8),
                 DiaryStaticCard(
                   name: '주간',
-                  backgroundColor: kyellowLightColor,
-                  highlightColor: kyellowColor,
+                  backgroundColor: kYellowLightColor,
+                  highlightColor: kYellowColor,
                   child: Stack(
                     children: [
                       Container(
@@ -124,7 +124,7 @@ class MyPageScreen extends StatelessWidget {
                         height: 80,
                         child: CircularProgressIndicator(
                           value: 0.7,
-                          color: kyellowColor,
+                          color: kYellowColor,
                           backgroundColor: Colors.white,
                           strokeWidth: 10.0,
                         ),
@@ -135,7 +135,7 @@ class MyPageScreen extends StatelessWidget {
                         child: Center(
                           child: Text(
                             '1/7',
-                            style: kSubtitleTextStyle.copyWith(color: kgrayDarkColor),
+                            style: kSubtitleTextStyle.copyWith(color: kGrayDarkColor),
                           ),
                         ),
                       )
@@ -145,8 +145,8 @@ class MyPageScreen extends StatelessWidget {
                 SizedBox(width: 8),
                 DiaryStaticCard(
                   name: '월간',
-                  backgroundColor: kgreenLightColor,
-                  highlightColor: kgreenColor,
+                  backgroundColor: kGreenLightColor,
+                  highlightColor: kGreenColor,
                   child: Stack(
                     children: [
                       Container(
@@ -155,7 +155,7 @@ class MyPageScreen extends StatelessWidget {
                         height: 80,
                         child: CircularProgressIndicator(
                           value: 0.7,
-                          color: kgreenColor,
+                          color: kGreenColor,
                           backgroundColor: Colors.white,
                           strokeWidth: 10.0,
                         ),
@@ -166,7 +166,7 @@ class MyPageScreen extends StatelessWidget {
                         child: Center(
                           child: Text(
                             '1/7',
-                            style: kSubtitleTextStyle.copyWith(color: kgrayDarkColor),
+                            style: kSubtitleTextStyle.copyWith(color: kGrayDarkColor),
                           ),
                         ),
                       )
