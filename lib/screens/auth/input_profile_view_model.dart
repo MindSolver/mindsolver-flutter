@@ -65,7 +65,7 @@ class InputProfileViewModel extends ChangeNotifier {
         'age': user.age,
         'job': user.job,
         'profileUrl': user.profileUrl,
-        'gener': user.gener,
+        'gener': user.gender,
       });
     } catch (e) {
       debugPrint('Error adding user: $e');

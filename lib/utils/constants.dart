@@ -23,6 +23,12 @@ TextStyle kTitleTextStyle = const TextStyle(
   fontWeight: FontWeight.w600,
 );
 
+TextStyle kAppBarTextStyle = const TextStyle(
+  fontSize: 20,
+  fontFamily: 'Pretendard',
+  fontWeight: FontWeight.w600,
+);
+
 TextStyle kSubtitleTextStyle = const TextStyle(
   fontSize: 16,
   fontFamily: 'Pretendard',

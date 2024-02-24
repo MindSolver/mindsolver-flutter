@@ -106,7 +106,7 @@ class _InputProfileScreenState extends State<InputProfileScreen> {
                         job: job,
                         profileUrl: viewModel.profileUrl,
                         age: int.tryParse(_ageController.text) ?? 0,
-                        gener: _gender,
+                        gender: _gender,
                       ));
                       if (!mounted) return;
                       Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyHomePage()));

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:mindsolver_flutter/models/conversation.dart';
+import 'package:mindsolver_flutter/models/diary.dart';
 import 'package:mindsolver_flutter/screens/diary/diary_view_model.dart';
-import 'package:mindsolver_flutter/screens/diary/writeTemplate.dart';
 import 'package:mindsolver_flutter/utils/constants.dart';
+import 'package:mindsolver_flutter/utils/date_time_util.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:intl/intl.dart';
 import 'chat/chat_screen.dart'; // Import the file containing talktoAI class
-import 'package:mindsolver_flutter/utils/constants.dart';
+
+import 'diary_view_model_2.dart';
 
 class DiaryScreen extends StatefulWidget {
   const DiaryScreen({super.key});
@@ -17,169 +17,195 @@ class DiaryScreen extends StatefulWidget {
 }
 
 class _DiaryScreenState extends State<DiaryScreen> {
-  final viewModel = DiaryViewModel();
+  final diaryViewModel2 = DiaryViewModel2();
 
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
 
-  List<Conversation>? model;
-
-  double boxwidth = 350;
-
   @override
   void initState() {
     super.initState();
-    viewModel.loadConversations(_selectedDay);
+
+    diaryViewModel2.loadDiaries();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<DiaryViewModel>(
-      create: (cotext) => viewModel,
+    return ChangeNotifierProvider<DiaryViewModel2>(
+      create: (context) => diaryViewModel2,
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.all(24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    'Diary',
-                    style: kTitleTextStyle,
-                  ),
+        body: Container(
+          padding: EdgeInsets.all(24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  'Diary',
+                  style: kTitleTextStyle,
                 ),
-                TableCalendar(
-                  focusedDay: _focusedDay,
-                  selectedDayPredicate: (day) {
-                    return isSameDay(_selectedDay, day);
-                  },
-                  firstDay: DateTime(2020, 1, 0),
-                  lastDay: DateTime(2030, 1, 1),
-                  locale: 'ko_KR',
-                  headerStyle: HeaderStyle(
-                    formatButtonVisible: false,
-                    titleCentered: true,
-                  ),
-                  calendarStyle: const CalendarStyle(
-                    selectedTextStyle: TextStyle(
-                      color: Colors.white, // Change to your custom selected text color
-                    ),
-                  ),
-                  calendarBuilders: CalendarBuilders(
-                    selectedBuilder: (context, date, events) => Container(
-                      margin: const EdgeInsets.all(4),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: kPurpleColor, // Change to your custom selected color
-                        shape: BoxShape.circle,
-                      ),
-                      child: Text(
-                        '${date.day}',
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                  onDaySelected: (selectedDay, focusedDay) {
-                    setState(() {
-                      _selectedDay = selectedDay;
-                      _focusedDay = selectedDay;
-                    });
-                  },
-                ),
-                const SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: Container(
-                    width: 100,
-                    height: 20,
-                    decoration: BoxDecoration(
-                      color: kPurpleDarkerColor, // Change to your custom color
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Center(
-                      child: Text(
-                        _selectedDay.toLocal().toString().split(' ')[0],
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  width: boxwidth,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    color: kPurpleLightColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Center(
-                    child: Text(
-                      (model != null && model!.isNotEmpty) ? model![0].message : _selectedDay.toLocal().toString(),
-                      style: const TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, bottom: 20),
-                  child: Container(
-                    width: boxwidth,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: kPurpleDarkerColor, // Change to your custom color
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ChatScreen(selectedDate: _selectedDay),
+              ),
+              buildTableCalendar(context),
+              // 다이어리 위젯
+              Consumer<DiaryViewModel2>(
+                builder: (context, viewModel, child) {
+                  return Expanded(
+                    child: ListView.builder(
+                      itemCount: diaryViewModel2.filteredDiaries.length,
+                      itemBuilder: (context, index) {
+                        final diary = diaryViewModel2.filteredDiaries[index];
+                        return Container(
+                          margin: EdgeInsets.only(top: 16),
+                          padding: EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: kGrayColor),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(diary.date.toFormattedString()),
+                              SizedBox(height: 8),
+                              Text(diary.content),
+                              Text(diary.emoji),
+                            ],
                           ),
                         );
                       },
-                      child: const Center(
-                        child: Text(
-                          'Create with interactive AI',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
                     ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: Container(
-                    width: boxwidth,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: kPurpleDarkerColor, // Change to your custom color
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: TextButton(
-                      onPressed: () {
-                        // Navigate to another page when button is pressed
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const WriteTemplate(), // Replace OtherPage() with the desired widget for the other page
-                          ),
-                        );
-                      },
-                      child: const Center(
-                        child: Text(
-                          'Create with Template',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+                  );
+                },
+              ),
+            ],
           ),
         ),
       ),
     );
+  }
+
+  Consumer<DiaryViewModel2> buildTableCalendar(
+      BuildContext context) {
+    return Consumer(
+      builder: (context, viewModel, child) {
+        return TableCalendar(
+          locale: 'ko_KR',
+          focusedDay: _focusedDay,
+          selectedDayPredicate: (day) {
+            return isSameDay(_selectedDay, day);
+          },
+          firstDay: DateTime(2020, 1, 0),
+          lastDay: DateTime(2030, 1, 1),
+          headerStyle: HeaderStyle(
+            formatButtonVisible: false,
+            titleCentered: true,
+          ),
+          calendarStyle: const CalendarStyle(
+            selectedTextStyle: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          calendarBuilders: CalendarBuilders(
+            outsideBuilder: (context, date, events) {
+              return Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.all(4),
+                child: Text('${date.day}',
+                    style: TextStyle(fontSize: 16, color: kGrayColor)),
+              );
+            },
+            defaultBuilder: (context, date, events) {
+              final diary = getDiary(diaryViewModel2.diaries, date);
+              if(isDiaryValid(diary)) {
+                return Container(
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.all(4),
+                  child: Text(diary!.emoji, style: TextStyle(fontSize: 30)),
+                );
+              }
+              return Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.all(4),
+                child: Text('${date.day}', style: TextStyle(fontSize: 16)),
+              );
+            },
+            todayBuilder: (context, date, events) {
+              final diary = getDiary(diaryViewModel2.diaries, date);
+              if(isDiaryValid(diary)) {
+                return Container(
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.all(4),
+                  child: Text(diary!.emoji, style: TextStyle(fontSize: 30)),
+                );
+              }
+              return Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.all(4),
+                child: Text('${date.day}', style: TextStyle(fontSize: 16)),
+              );
+            },
+            selectedBuilder: (context, date, events) {
+              final diary = getDiary(diaryViewModel2.diaries, date);
+              if(isDiaryValid(diary)) {
+                return Container(
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.all(4),
+                  child: Text(diary!.emoji, style: TextStyle(fontSize: 30)),
+                );
+              }
+              return Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.all(4),
+                child: Text('${date.day}', style: TextStyle(fontSize: 16)),
+              );
+            },
+          ),
+          onDaySelected: (selectedDay, focusedDay) {
+            // diaryViewModel2.addDiary(Diary(
+            //   date: selectedDay,
+            //   content: '일기를 작성해주세요',
+            //   emoji: '😊',
+            // ));
+            diaryViewModel2.filterDiaries(date: selectedDay);
+
+            final diary = getDiary(diaryViewModel2.diaries, selectedDay);
+            if(!isDiaryValid(diary)) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ChatScreen(date: selectedDay)
+                ),
+              );
+            }
+          },
+          onPageChanged: (date) {
+            print(date);
+            setState(() {
+              _selectedDay = date;
+              _focusedDay = date;
+            });
+          },
+        );
+      },
+    );
+  }
+
+  bool isDiaryValid(Diary? diary) {
+    if(diary == null) {
+      return false;
+    }
+    return diary.content.isNotEmpty;
+  }
+
+  Diary? getDiary(List<Diary> diaries, DateTime date) {
+    for (var diary in diaries) {
+      if (diary.date.isSameDate(date)) {
+
+          return diary;
+
+      }
+    }
+    return null;
   }
 }

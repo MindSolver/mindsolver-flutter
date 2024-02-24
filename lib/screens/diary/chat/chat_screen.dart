@@ -1,140 +1,173 @@
+import 'dart:isolate';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mindsolver_flutter/enums/bot_response.dart';
 import 'package:mindsolver_flutter/models/conversation.dart';
+import 'package:mindsolver_flutter/models/diary.dart';
 import 'package:mindsolver_flutter/screens/diary/chat/bubble.dart';
 import 'package:mindsolver_flutter/screens/diary/diary_view_model.dart';
+import 'package:mindsolver_flutter/screens/diary/diary_view_model_2.dart';
 import 'package:mindsolver_flutter/utils/constants.dart';
 import 'package:mindsolver_flutter/utils/date_time_util.dart';
 import 'package:provider/provider.dart';
 
 class ChatScreen extends StatefulWidget {
-  final DateTime selectedDate;
+  final DateTime date;
 
-  const ChatScreen({super.key, required this.selectedDate});
+  const ChatScreen({super.key, required this.date});
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
-  final diaryViewModel = DiaryViewModel();
-
+  late DiaryViewModel diaryViewModel;
   final textEditingController = TextEditingController();
-
-  bool isDiaryToday = false;
 
   @override
   void initState() {
     super.initState();
-    isDiaryToday = isSameDate(widget.selectedDate, DateTime.now());
-    check();
+
+    diaryViewModel = DiaryViewModel(date: widget.date);
 
     WidgetsBinding.instance.addObserver(this);
-
-    diaryViewModel.generateDiary();
+    diaryViewModel.loadConversations().then((value) {
+      runBot();
+    });
   }
 
-  void check() {
-    if (!isDiaryToday) {
-      return;
-    }
+  void runBot() async {
+    final list = diaryViewModel.conversations;
 
-    diaryViewModel.loadConversations(widget.selectedDate).then(
-          (value) {
-        final list = diaryViewModel.conversations;
+    await botPrompt(list);
+    await botResponse(list);
+    await botWriteDiary(list);
 
-        for (BotResponse botResponse in BotResponse.values) {
-          bool isBotPrompted = false;
-          bool isBotResponse = false;
-          bool isUserExists = false;
+  }
 
-          for (Conversation conversation in list) {
-            if (conversation.diaryHour != botResponse.diaryHour) {
-              continue;
-            }
+  Future<void> botPrompt(List<Conversation> list) async {
+    DateTime now = DateTime.now();
+    int hour = 0;
 
-            if (!isBotPrompted) {
-              isBotPrompted = conversation.isBot &&
-                  conversation.message == botResponse.prompt;
-            }
-
-            if (!isBotResponse) {
-              isBotResponse = conversation.isBot &&
-                  conversation.message == botResponse.response;
-            }
-
-            if (!isUserExists) {
-              isUserExists = !conversation.isBot;
-            }
-          }
-
-          // 디버깅을 위한 로그 출력
-          print('botResponse: $botResponse');
-          print('list: $list');
-          print('isBotPrompted: $isBotPrompted');
-          print('isBotResponse: $isBotResponse');
-          print('isUserExists: $isUserExists');
-
-          final now = DateTime.now();
-          print(now);
-
-          if (!isBotPrompted) {
-            if (now.hour >= botResponse.diaryHour &&
-                now.hour < botResponse.limitHour) {
-              print('프롬프트 추가');
-              diaryViewModel
-                  .addConversation(
-                Conversation(
-                  message: botResponse.prompt,
-                  isBot: true,
-                  diaryHour: botResponse.diaryHour,
-                  timeStamp: now,
-                ),
-              )
-                  .then((value) =>
-                  diaryViewModel.loadConversations(widget.selectedDate));
-            }
-          } else {
-            // 프롬포트 있는 경우
-            if (isUserExists && !isBotResponse) {
-              // 사용자 대답이 있는 경우
-              diaryViewModel
-                  .addConversation(Conversation(
-                message: botResponse.response,
+    for (BotResponse botResponse in BotResponse.values) {
+      if (now.hour >= botResponse.diaryHour &&
+          now.hour < botResponse.limitHour) {
+        hour = botResponse.diaryHour;
+        if (list.where((element) {
+          return element.diaryHour == hour &&
+              element.type == Conversation.TYPE_BOT_PROMPT;
+        }).isEmpty) {
+          await diaryViewModel
+              .addConversation(Conversation(
+                message: botResponse.prompt,
                 isBot: true,
-                diaryHour: botResponse.diaryHour,
+                diaryHour: hour,
                 timeStamp: now,
-              )).then((value) async {
-                diaryViewModel.loadConversations(widget.selectedDate);
-                if (botResponse.diaryHour == BotResponse.end.diaryHour) {
-                  print('호출 시작!');
-                  // await diaryViewModel.generateDiary((result) {
-                  //   print(result);
-                  // });
-                }
-              });
-            }
+                type: Conversation.TYPE_BOT_PROMPT,
+              ))
+              .then((value) => diaryViewModel.loadConversations());
+        }
+      }
+    }
+  }
+
+  Future<void> botResponse(List<Conversation> list) async {
+    DateTime now = DateTime.now();
+    int hour = 0;
+
+    for (BotResponse botResponse in BotResponse.values) {
+      if (now.hour >= botResponse.diaryHour &&
+          now.hour < botResponse.limitHour) {
+        hour = botResponse.diaryHour;
+        if (list.where((element) {
+          return element.diaryHour == hour &&
+              element.type == Conversation.TYPE_BOT_RESPONSE;
+        }).isEmpty) {
+          if (isUserResponse(list, hour)) {
+            await diaryViewModel
+                .addConversation(Conversation(
+                  message: botResponse.response,
+                  isBot: true,
+                  diaryHour: hour,
+                  timeStamp: now,
+                  type: Conversation.TYPE_BOT_RESPONSE,
+                ))
+                .then((value) => diaryViewModel.loadConversations());
           }
         }
-      },
-    );
+      }
+    }
+  }
+
+  Future<void> botWriteDiary(List<Conversation> list) async {
+    DateTime now = DateTime.now();
+    int hour = 0;
+
+    for (BotResponse botResponse in BotResponse.values) {
+      if (now.hour >= botResponse.diaryHour &&
+          now.hour < botResponse.limitHour) {
+        hour = botResponse.diaryHour;
+        if (list.where((element) {
+          return element.diaryHour == hour &&
+              element.type == Conversation.TYPE_DIARY;
+        }).isEmpty) {
+          if (canDiaryBeGenerated(list)) {
+            String randomId = DateTime.now().millisecondsSinceEpoch.toString();
+
+            diaryViewModel.generateDiary((result) async {
+              diaryViewModel
+                  .addConversation(Conversation(
+                    id: randomId,
+                    message: result,
+                    isBot: true,
+                    diaryHour: BotResponse.end.diaryHour,
+                    timeStamp: DateTime.now(),
+                    type: Conversation.TYPE_DIARY,
+                  ))
+                  .then((value) => diaryViewModel.loadConversations());
+            }, (String result) {
+              DiaryViewModel2 diaryViewModel2 = DiaryViewModel2();
+              diaryViewModel2.updateDiary(Diary(
+                date: widget.date.trimTime(),
+                content: result,
+                emoji: '👟',
+              ));
+            });
+          }
+        }
+      }
+    }
+  }
+
+
+
+
+
+  bool isUserResponse(List<Conversation> list, int hour) {
+    return list.where((element) {
+      return element.diaryHour == hour &&
+          element.type == Conversation.TYPE_USER_RESPONSE;
+    }).isNotEmpty;
+  }
+
+  bool canDiaryBeGenerated(List<Conversation> list) {
+    return list.where((element) {
+      return element.type == Conversation.TYPE_BOT_RESPONSE;
+    }).length == 4;
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.resumed:
-        check();
+        // runBot();
         break;
       case AppLifecycleState.detached:
         break;
       case AppLifecycleState.inactive:
-      // TODO: Handle this case.
       case AppLifecycleState.hidden:
-      // TODO: Handle this case.
       case AppLifecycleState.paused:
-      // TODO: Handle this case.
     }
   }
 
@@ -142,15 +175,15 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${DateFormat('MM/dd').format(widget.selectedDate)}'),
+        title: Text(widget.date.toFormattedString()),
       ),
       body: ChangeNotifierProvider(
         create: (context) => diaryViewModel,
         child: Column(
           children: [
             Expanded(
-              child: Consumer(
-                builder: (context, DiaryViewModel viewModel, child) {
+              child: Consumer<DiaryViewModel>(
+                builder: (context, viewModel, child) {
                   final list = viewModel.conversations;
 
                   return ListView.builder(
@@ -161,8 +194,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                       return Bubble(
                         message: conversation.message,
                         isMe: !conversation.isBot,
-                        date: DateFormat('HH:mm').format(conversation
-                            .timeStamp),
+                        date:
+                            DateFormat('HH:mm').format(conversation.timeStamp),
                       );
                     },
                   );
@@ -197,15 +230,18 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                       Conversation userConversation = Conversation(
                         message: enteredText,
                         isBot: false,
+                        type: Conversation.TYPE_USER_RESPONSE,
                         diaryHour: hour,
                         timeStamp: now,
                       );
 
-                      await diaryViewModel.addConversation(userConversation);
+                      diaryViewModel
+                          .addConversation(userConversation)
+                          .then((value) {
+                        diaryViewModel.loadConversations().then((value) => runBot());
+                      });
 
                       textEditingController.clear(); // Clear the text field
-
-                      check();
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(
