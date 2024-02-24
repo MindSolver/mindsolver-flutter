@@ -7,7 +7,7 @@ class MyPageViewModel extends ChangeNotifier {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
 
-  UserDoc _userData = UserDoc(name: '', job: '', profileUrl: '', age: 0, gener: 0);
+  UserDoc _userData = UserDoc(name: '', job: '', profileUrl: '', age: 0, gender: 0);
 
   UserDoc get userData => _userData;
 
@@ -32,7 +32,7 @@ class MyPageViewModel extends ChangeNotifier {
             job: data['job'] ?? '',
             profileUrl: data['profileUrl'] ?? '',
             age: data['age'] ?? 0,
-            gener: data['gener'] ?? 0,
+            gender: data['gender'] ?? 0,
           );
           print(userData);
         }
