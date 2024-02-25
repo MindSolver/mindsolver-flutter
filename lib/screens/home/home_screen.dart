@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mindsolver_flutter/components/chat.bubble.dart';
 import 'package:mindsolver_flutter/screens/home/diagnosis/diagnosis_screen.dart';
+import 'package:mindsolver_flutter/screens/home/welfare/welfare_screen.dart';
 import 'package:mindsolver_flutter/screens/mypage/my_page_view_model.dart';
 import 'package:mindsolver_flutter/utils/constants.dart';
 import 'package:provider/provider.dart';
@@ -28,22 +29,22 @@ class HomeScreen extends StatelessWidget {
                   Text('AI가 생성한 당신의 기분을 표현한 일기', style: kBody1TextStyle),
                   SizedBox(height: 16),
                   ChatBubble(
-                      message: '하루 3번 기분을 작성하면 AI가 대신 일기를 작성합니다!',
-                      isMe: false),
+                      message: '하루 3번 기분을 작성하면 AI가 대신 일기를 작성합니다!', isMe: false),
                   SizedBox(height: 8),
                   ChatBubble(message: '지금 작성하러 가기 →', isMe: true),
                 ],
               ),
             ),
             Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => DiagnosisScreen()));
-                },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => DiagnosisScreen()));
+                    },
+                    child: Container(
                       width: double.infinity,
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
@@ -61,8 +62,14 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    SizedBox(height: 16),
-                    Container(
+                  ),
+                  SizedBox(height: 16),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => WelfareScreen()));
+                    },
+                    child: Container(
                       width: double.infinity,
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
@@ -74,14 +81,13 @@ class HomeScreen extends StatelessWidget {
                         children: [
                           Text('정신건강복지센터', style: kSubtitleTextStyle),
                           SizedBox(height: 8),
-                          Text(
-                              '지역사회 내 정신질환 예방, 정신질환자 발견･상담･정신재활훈련 및 사례관리',
+                          Text('지역사회 내 정신질환 예방, 정신질환자 발견･상담･정신재활훈련 및 사례관리',
                               style: kBody1TextStyle),
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],
